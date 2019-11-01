@@ -1,6 +1,7 @@
 import React from 'react'
 import { Card } from 'semantic-ui-react'
 
+
 class PokemonCard extends React.Component {
   state = {
     showFront : true
@@ -18,7 +19,7 @@ class PokemonCard extends React.Component {
       <Card onClick={this.handleClick}>
         <div>
           <div className="image">
-            <img src={this.state.showFront ? front_image : back_image} alt="oh no!" />
+            <img height={96} src={this.state.showFront ? front_image : back_image} alt="oh no!" />
           </div>
           <div className="content">
             <div className="header">{this.props.pokemon.name.toUpperCase()}</div>

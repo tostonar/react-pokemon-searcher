@@ -16,19 +16,46 @@ class PokemonPage extends React.Component {
     .then(pokemon => this.setState({pokemon}))
   }
 
-  // only works for exact match, not partial  🤷🏾‍♀
+  // now works with partial  🤷🏾‍♀
   filterPokemon = (e) => {
     let name = e.target.value
-    let filteredPokemon = this.state.pokemon.slice().filter(poke => poke.name === name )
+    let filteredPokemon = this.state.pokemon.slice().filter(poke => poke.name.toLowerCase().includes(name)  )
     this.setState({ filteredPokemon })
   }
+
+  // create a new pokemon
+  handleSubmit = (event, newPokemon) => {
+    event.preventDefault();
+
+    fetch('http://localhost:3000/pokemon', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        name: newPokemon.name,
+        weight: newPokemon.hp,
+        sprites: {
+          front: newPokemon.frontUrl,
+          back: newPokemon.backUrl
+        }
+      })
+    }).then((res) => res.json())
+    .then((data) =>  this.setState({pokemon: [...this.state.pokemon, data]}))
+    .catch((err)=>console.log(err))
+
+  }
+
+
+
 
   render() {
     return (
       <div>
         <h1>Pokemon Searcher</h1>
         <br />
-        <PokemonForm />
+        <PokemonForm handleSubmit={this.handleSubmit} />
         <br />
         <Search onSearchChange={this.filterPokemon} showNoResults={false} />
         <br />
